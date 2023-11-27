@@ -1,0 +1,58 @@
+@import '/src/assets/_colors.sass'
+.stocks
+  display: flex
+  flex-direction: column-reverse
+
+  .card
+    color: white
+    margin-bottom: 2rem
+    .card-body
+      .card-title
+        color: $dark-green
+        font-weight: 600
+        gap: .5rem
+        display: flex
+      table
+        thead
+          tr
+            th
+              text-align: center
+              background-color: $cambridge-blue
+              background-color: transparent
+        tbody
+          tr
+            th
+              text-align: center
+              color: $dark-green
+            td
+              text-align: center
+            .quantity
+              width: 10%
+            .name
+              width: 40%
+            .details
+              width: 30%
+            .actions
+              gap: .4rem
+              display: flex
+              justify-content: center
+              button
+                background-color: $champagne
+                border: none
+                border-radius: .25rem
+                transition: .2s
+                i
+                  color: black
+                  transition: .2s
+                  margin: .4rem
+                &:hover
+                  background-color: $dark-green
+                  transition: .2s
+                  i
+                    color: $champagne
+                    transition: .2s
+
+
+
+
+

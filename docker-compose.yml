@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  angular-app:
+    image: marble-shop
+    ports:
+      - "4200:4200"
+    volumes:
+      - /Users/belts/OneDrive/Área de Trabalho/Projetos/marble-shop-main:/usr/src/app
+    working_dir: /usr/src/app

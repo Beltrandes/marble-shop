@@ -1,0 +1,19 @@
+<div class="card shadow">
+  <div class="card-body">
+    <div class="card-title">
+      {{title}}
+      <i class="fa-solid fa-{{iconName}}"></i>
+    </div>
+    <div class="controls">
+      <div class="form-floating">
+        <input type="tex" class="form-control" id="floatingInput" placeholder="name@example.com">
+        <label for="floatingInput">Pesquisar</label>
+      </div>
+      <button (click)="onAdd()" class="btn">
+        Adicionar
+        <i class="fa-solid fa-plus"></i>
+      </button>
+    </div>
+  </div>
+
+</div>

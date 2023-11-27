@@ -1,0 +1,33 @@
+<div *ngIf="stocks$ | async as stocks" class="stocks">
+  <div *ngFor="let stock of stocks" class="card shadow">
+    <div class="card-body">
+      <h5 class="card-title">
+        {{ stock.name }}
+        <i class="fa-solid fa-box"></i>
+      </h5>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" style="width: 10%;">Qtde.</th>
+            <th scope="col" style="width: 40%;">Nome</th>
+            <th scope="col" style="width: 30%;">Detalhes</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of stock.items">
+            <th scope="row" class="quantity">{{ item.quantity }}</th>
+            <td class="name">{{ item.name }}</td>
+            <td class="details">{{ item.details }} <span *ngIf="item.details === null">-</span></td>
+            <td class="actions">
+              <button><i class="fa-solid fa-arrow-up"></i></button>
+              <button><i class="fa-solid fa-trash"></i></button>
+              <button><i class="fa-solid fa-plus"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

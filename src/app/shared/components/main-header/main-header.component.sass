@@ -1,0 +1,42 @@
+@import '/src/assets/_colors.sass'
+
+.card
+  background-color: $honeydew
+  .card-body
+    .card-title
+      font-size: 1.5rem
+      font-weight: 500
+      color: $dark-green
+      gap: .5rem
+      display: flex
+    .controls
+      gap: 1.5rem
+      display: flex
+      .form-floating
+        height: 100%
+        width: 50%
+        border-radius: .25rem
+        border: none
+        input
+          height: 100%
+          border-radius: .25rem
+          box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px
+          &:focus
+            border: 1px solid $dark-green
+            box-shadow: none
+            box-shadow: rgba(14, 110, 69, 0.2) 10px 8px 24px
+      button
+        height: 100%
+        padding: 1rem
+        border-radius: .25rem
+        width: 15%
+        background-color: black
+        color: $champagne
+        font-weight: 600
+        gap: .5rem
+        display: flex
+        align-items: center
+        justify-content: center
+        font-size: 1rem
+        &:hover
+          background-color: #222222

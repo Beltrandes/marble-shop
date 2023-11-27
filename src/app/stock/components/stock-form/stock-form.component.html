@@ -1,0 +1,15 @@
+<div class="card shadow">
+  <div class="card-body">
+    <div class="card-title">
+      Novo estoque
+      <button (click)="closeForm()" type="button" class="btn-close" aria-label="Close"></button>
+    </div>
+    <form [formGroup]="stockForm">
+      <div class="mb-3">
+        <label for="inputName" class="form-label">Nome</label>
+        <input formControlName="name" type="text" class="form-control" id="inputName">
+      </div>
+      <button (click)="onSubmit()" class="btn">Salvar</button>
+    </form>
+  </div>
+</div>
