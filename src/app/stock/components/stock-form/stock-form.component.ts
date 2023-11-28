@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { StockFormService } from '../../services/stock-form.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { StockListService } from '../../services/stock-list.service';
+import { StockService } from '../../services/stock.service';
 
 @Component({
   selector: 'app-stock-form',
@@ -21,7 +20,7 @@ export class StockFormComponent {
     private formBuilder: FormBuilder,
     private location: Location,
     private stockFormService: StockFormService,
-    private stockListService: StockListService,
+    private stockService: StockService,
     private route: ActivatedRoute,
     private router: Router
   ) {
@@ -38,9 +37,9 @@ export class StockFormComponent {
 
   onSubmit() {
     if (this.stockForm.value.name !== '') {
-      this.stockFormService.save(this.stockForm.value).subscribe({
+      this.stockService.saveStock(this.stockForm.value).subscribe({
         next: () => {
-          this.stockListService.stockAddedSuccess()
+          this.stockService.stockAddedSuccess()
           this.closeForm()
         },
         error: (err) => console.log(err)

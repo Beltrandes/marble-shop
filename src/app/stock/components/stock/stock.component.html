@@ -1,5 +1,71 @@
 <div class="container">
-  <main-header (addStock)="onAddStock()" [title]="headerTitle" [iconName]="headerIconName"></main-header>
+  <main-header
+    (addStock)="onAddStock()"
+    [title]="headerTitle"
+    [iconName]="headerIconName"
+  ></main-header>
   <router-outlet></router-outlet>
-  <stock-list></stock-list>
+  <stock-list
+    *ngIf="stocks$ | async as stocks"
+    [stocks]="stocks"
+    (withdraw)="openWithdrawModal($event)"
+  ></stock-list>
+  <div
+    class="modal fade"
+    id="withdrawModal"
+    tabindex="-1"
+    aria-labelledby="whithdrawModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content shadow">
+        <div class="modal-header">
+          <div class="modal-titles">
+            <h1 class="modal-title fs-5" id="whithdrawModalLabel">
+              Retirar itens
+            </h1>
+            <h5 class="modal-subtitle">Indique o funcionário e a quantidade para prosseguir</h5>
+          </div>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="withdrawForm" class="mb-1">
+            <div class="employee">
+              <label for="employeesSelect">Funcionário</label>
+              <select
+                class="form-select"
+                id="employeesSelect"
+                aria-label="Default select example"
+                formControlName="employeeId"
+              >
+                <option selected>Selecione um funcionário</option>
+                <option *ngFor="let employee of employees$ | async" value="{{employee.id}}">{{employee.name}}</option>
+
+              </select>
+            </div>
+            <div class="quantity">
+              <label for="quantityInput">Quantidade</label>
+              <input type="number" formControlName="quantity" class="form-control" id="quantityInput" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            (click)="closeWithdrawModal()"
+            class="btn cancel"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+          <button type="button" (click)="withdraw()" class="btn confirm">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

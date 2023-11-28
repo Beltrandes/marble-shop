@@ -7,7 +7,7 @@ import { MainHeaderComponent } from './components/main-header/main-header.compon
 @NgModule({
   declarations: [
     NavbarComponent,
-    MainHeaderComponent
+    MainHeaderComponent,
   ],
   imports: [
     CommonModule

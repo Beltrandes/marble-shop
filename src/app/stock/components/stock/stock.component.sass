@@ -1,5 +1,48 @@
+@import '/src/assets/_colors.sass'
+
 .container
   padding-top: 1rem
   gap: 2rem
   flex-direction: column
   display: flex
+
+.modal
+  background-color: rgba(0, 0, 0, 0.25)
+  .modal-dialog
+    top: 20%
+    .modal-content
+      background-color: $cambridge-blue
+      border: 1px solid $dark-green
+      color: $champagne
+      .modal-header
+        border-bottom: none
+        .modal-titles
+          display: flex
+          flex-direction: column
+          .modal-title
+            color: $dark-green
+          .modal-subtitle
+            font-size: .8rem
+      .modal-footer
+        border-top: none
+        .confirm
+          background-color: $dark-green
+          color: $champagne
+        .cancel
+          background-color: $champagne
+          &:hover
+            background-color: #c2bcb4
+            color: #f3eadf
+  form
+    display: flex
+    justify-content: space-between
+    label
+      color: $dark-green
+      font-weight: 500
+    .employee
+      width: 55%
+      select
+        border: 1px solid $dark-green
+    .quantity
+      width: 38%
+
