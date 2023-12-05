@@ -14,6 +14,9 @@ export class MainHeaderComponent {
   @Input()
   iconName = ''
 
+  @Input()
+  btnText = ''
+
   @Output() addStock: EventEmitter<void> = new EventEmitter<void>()
 
 

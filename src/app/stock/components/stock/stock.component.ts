@@ -1,70 +1,93 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Observable, Subject, finalize, takeUntil } from 'rxjs';
 import { Stock } from '../../models/Stock';
 import { StockService } from '../../services/stock.service';
 import { Employee } from '../../models/Employee';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+declare let window: any;
 
 @Component({
   selector: 'app-stock',
   templateUrl: './stock.component.html',
-  styleUrls: ['./stock.component.sass']
+  styleUrls: ['./stock.component.sass'],
 })
 export class StockComponent implements OnInit, OnDestroy {
+  headerTitle = '/Estoque';
 
-  headerTitle = '/Estoque'
+  stocks$!: Observable<Stock[]>;
 
-  stocks$!: Observable<Stock[]>
+  employees$!: Observable<Employee[]>;
 
-  employees$!: Observable<Employee[]>
+  headerIconName = 'boxes-stacked';
 
-  headerIconName = 'boxes-stacked'
+  withdrawForm: FormGroup;
 
-  withdrawForm: FormGroup
+  addStockItemForm: FormGroup;
 
-  stockISelectedToWithdrawId = ''
+  withdrawModal: any;
+
+  stockItemModal: any
+
+  btnText = 'Novo estoque'
+
+  stockISelectedToWithdrawId = '';
 
   constructor(
     private router: Router,
     private route: ActivatedRoute,
     private stockService: StockService,
-    private renderer: Renderer2,
     private formBuilder: FormBuilder
-    ) {
-      this.withdrawForm = this.formBuilder.group({
-        employeeId: [''],
-        stockItemId: [this.stockISelectedToWithdrawId],
-        quantity: [0]
-      })
-    }
+  ) {
+    this.withdrawForm = this.formBuilder.group({
+      employeeId: ['', Validators.required],
+      stockItemId: [this.stockISelectedToWithdrawId],
+      quantity: [0, Validators.min(1)],
+    });
 
-  onAddStock() {
-    this.router.navigate(['novo'], {relativeTo: this.route})
+    this.addStockItemForm = this.formBuilder.group({
+      name: ['', Validators.required],
+      details: [''],
+      quantity: [0],
+      stockId: ['', Validators.required]
+    })
   }
 
-  @Output() withdrawStockItem: EventEmitter<void> = new EventEmitter<void>()
+  onAddStock() {
+    this.router.navigate(['novo'], { relativeTo: this.route });
+  }
 
+  @Output() withdrawStockItem: EventEmitter<void> = new EventEmitter<void>();
 
-  private unsubscribe$: Subject<void> = new Subject<void>()
-
+  private unsubscribe$: Subject<void> = new Subject<void>();
 
   ngOnInit(): void {
-    this.loadStocks()
-    this.listenForStockUpdates()
+    this.loadStocks();
+    this.listenForStockUpdates();
+    let withdrawModal = document.getElementById('withdrawModal');
+    this.withdrawModal = new window.bootstrap.Modal(withdrawModal);
+    let stockItemModal = document.getElementById('stockItemModal')
+    this.stockItemModal = new window.bootstrap.Modal(stockItemModal)
   }
 
   ngOnDestroy(): void {
-    this.unsubscribe$.next()
-    this.unsubscribe$.complete()
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 
   loadStocks() {
-    this.stocks$ = this.stockService.listStocks()
+    this.stocks$ = this.stockService.listStocks();
   }
 
   loadEmployees() {
-    this.employees$ = this.stockService.listEmployees()
+    this.employees$ = this.stockService.listEmployees();
   }
 
   listenForStockUpdates() {
@@ -73,31 +96,37 @@ export class StockComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((added: boolean) => {
         if (added) {
-          this.loadStocks()
+          this.loadStocks();
         }
-      })
+      });
   }
 
   openWithdrawModal(stockItemId: string) {
-    this.loadEmployees()
+    this.loadEmployees();
     this.withdrawForm.patchValue({
-      stockItemId: stockItemId
-    })
-    const withdrawModal = document.getElementById('withdrawModal')
-    this.renderer.addClass(withdrawModal, 'show')
-    this.renderer.setStyle(withdrawModal, 'display', 'block')
+      stockItemId: stockItemId,
+    });
+    this.withdrawModal.show();
   }
 
-  closeWithdrawModal() {
-    const withdrawModal = document.getElementById('withdrawModal')
-    this.renderer.setStyle(withdrawModal, 'display',  'none')
-  }
+
 
   withdraw() {
-    this.stockService.withdrawStockItem(this.withdrawForm.value).subscribe({
-      next: () => console.log('deu certo'),
-      error: (err) => console.log(err),
-      complete: () => this.closeWithdrawModal()
-    })
+    if (this.withdrawForm.valid) {
+      this.stockService.withdrawStockItem(this.withdrawForm.value).pipe(
+        finalize(() => {
+          setTimeout(() => {
+            this.loadStocks()
+          },500)
+          this.withdrawForm.reset()
+        })
+      ).subscribe({
+        error: (err) => console.log(err)
+      })
+    }
+  }
+
+  onAddStockItem(stockId: string) {
+    this.stockItemModal.show()
   }
 }

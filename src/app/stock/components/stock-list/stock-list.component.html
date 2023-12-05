@@ -1,9 +1,16 @@
 <div class="stocks">
   <div *ngFor="let stock of stocks" class="card shadow">
     <div class="card-body">
-      <h5 class="card-title">
-        {{ stock.name }}
-        <i class="fa-solid fa-box"></i>
+      <h5 class="card-title align-items-center">
+        <div class="stock-name">
+          {{ stock.name }}
+          <i class="fa-solid fa-box"></i>
+        </div>
+
+        <button (click)="addStockItem(stock.id)" class="btn">
+          Novo item
+          <i class="fa-solid fa-plus"></i>
+        </button>
       </h5>
 
       <table class="table">

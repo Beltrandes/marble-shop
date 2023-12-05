@@ -14,10 +14,17 @@ export class StockListComponent {
   stocks: Stock[] = []
 
   @Output()
+  addItem = new EventEmitter(false)
+
+  @Output()
   withdraw = new EventEmitter(false)
 
   withdrawStockItem(stockItemId: string) {
     this.withdraw.emit(stockItemId)
+  }
+
+  addStockItem(stockId: string) {
+    this.addItem.emit(stockId)
   }
 
 
