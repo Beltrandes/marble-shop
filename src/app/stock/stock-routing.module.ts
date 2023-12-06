@@ -5,7 +5,7 @@ import { StockFormComponent } from './components/stock-form/stock-form.component
 
 const routes: Routes = [
   {path: '', component: StockComponent, children: [
-    {path: 'novo', component: StockFormComponent}
+    {path: 'novo', component: StockFormComponent},
   ]}
 ];
 

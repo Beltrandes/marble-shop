@@ -12,18 +12,32 @@
         font-weight: 600
         display: flex
         justify-content: space-between
-        button
-          border: none
+        .stock-actions
           display: flex
-          gap: .25rem
-          background-color: $dark-green
-          padding: .25rem
-          color: $champagne
-          font-size: .9rem
-          align-items: center
-          border-radius: .25rem
-          i
+          gap: .5rem
+          button
+            border: none
+            display: flex
+            align-items: center
+            border-radius: .15rem
+            color: $champagne
+          .add-btn
+            gap: .25rem
+            background-color: $dark-green
             font-size: .9rem
+            i
+              font-size: .9rem
+            &:hover
+              background-color: #315a3c
+
+          .remove-btn
+            padding: 0.5rem
+            background-color: #ff3a3a
+            i
+              font-size: .9rem
+            &:hover
+              background-color: red
+
       table
         thead
           tr
@@ -48,10 +62,15 @@
               gap: .4rem
               display: flex
               justify-content: center
+              align-items: center
+              .remove-btn
+                &:hover
+                  background-color: red
+                  transition: .2s
               button
                 background-color: $champagne
                 border: none
-                border-radius: .25rem
+                border-radius: .15rem
                 transition: .2s
                 i
                   color: black

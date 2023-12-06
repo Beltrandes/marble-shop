@@ -1,7 +1,5 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, Input } from '@angular/core';
-import { Observable, Subject, takeUntil } from 'rxjs';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { Stock } from '../../models/Stock';
-import { StockService } from '../../services/stock.service';
 
 @Component({
   selector: 'stock-list',
@@ -17,14 +15,21 @@ export class StockListComponent {
   addItem = new EventEmitter(false)
 
   @Output()
+  removeItem = new EventEmitter(false)
+
+  @Output()
   withdraw = new EventEmitter(false)
 
   withdrawStockItem(stockItemId: string) {
     this.withdraw.emit(stockItemId)
   }
 
-  addStockItem(stockId: string) {
-    this.addItem.emit(stockId)
+  addStockItem(stock: Stock) {
+    this.addItem.emit(stock)
+  }
+
+  removeStockItem(stockItemId: string) {
+    this.removeItem.emit(stockItemId)
   }
 
 

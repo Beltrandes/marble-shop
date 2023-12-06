@@ -30,16 +30,23 @@ export class StockComponent implements OnInit, OnDestroy {
 
   withdrawForm: FormGroup;
 
-  addStockItemForm: FormGroup;
+  stockItemForm: FormGroup;
 
   withdrawModal: any;
 
-  stockItemModal: any
+  stockItemModal: any;
 
-  btnText = 'Novo estoque'
+  btnText = 'Novo estoque';
 
-  stockISelectedToWithdrawId = '';
+  stockIdSelectedToWithdrawId = '';
 
+  stockIdSelectedToAddItem = '';
+
+  stockNameSelectedToAddItem = '';
+
+  stockSelectedToAddItem!: Stock;
+
+  selectedView = 'stocks'
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -48,16 +55,16 @@ export class StockComponent implements OnInit, OnDestroy {
   ) {
     this.withdrawForm = this.formBuilder.group({
       employeeId: ['', Validators.required],
-      stockItemId: [this.stockISelectedToWithdrawId],
+      stockItemId: [this.stockIdSelectedToWithdrawId],
       quantity: [0, Validators.min(1)],
     });
 
-    this.addStockItemForm = this.formBuilder.group({
+    this.stockItemForm = this.formBuilder.group({
       name: ['', Validators.required],
       details: [''],
-      quantity: [0],
-      stockId: ['', Validators.required]
-    })
+      quantity: [0, Validators.min(1)],
+      stock: ['', Validators.required],
+    });
   }
 
   onAddStock() {
@@ -73,8 +80,8 @@ export class StockComponent implements OnInit, OnDestroy {
     this.listenForStockUpdates();
     let withdrawModal = document.getElementById('withdrawModal');
     this.withdrawModal = new window.bootstrap.Modal(withdrawModal);
-    let stockItemModal = document.getElementById('stockItemModal')
-    this.stockItemModal = new window.bootstrap.Modal(stockItemModal)
+    let stockItemModal = document.getElementById('stockItemModal');
+    this.stockItemModal = new window.bootstrap.Modal(stockItemModal);
   }
 
   ngOnDestroy(): void {
@@ -109,24 +116,59 @@ export class StockComponent implements OnInit, OnDestroy {
     this.withdrawModal.show();
   }
 
-
-
   withdraw() {
     if (this.withdrawForm.valid) {
-      this.stockService.withdrawStockItem(this.withdrawForm.value).pipe(
-        finalize(() => {
-          setTimeout(() => {
-            this.loadStocks()
-          },500)
-          this.withdrawForm.reset()
-        })
-      ).subscribe({
-        error: (err) => console.log(err)
-      })
+      this.stockService
+        .withdrawStockItem(this.withdrawForm.value)
+        .pipe(
+          finalize(() => {
+            setTimeout(() => {
+              this.loadStocks();
+            }, 500);
+            this.withdrawForm.reset();
+          })
+        )
+        .subscribe({
+          error: (err) => console.log(err),
+        });
     }
   }
 
-  onAddStockItem(stockId: string) {
-    this.stockItemModal.show()
+  onAddStockItem(stock: Stock) {
+    this.stockItemForm.patchValue({
+      stock: stock,
+    });
+
+    this.stockItemModal.show();
+
+    this.stockIdSelectedToAddItem = stock.id;
+
+    this.stockNameSelectedToAddItem = stock.name;
+    console.log(this.stockItemForm.value);
+  }
+
+  addItem() {
+    if (this.stockItemForm.valid) {
+      this.stockService
+        .saveStockItem(this.stockItemForm.value)
+        .pipe(
+          finalize(() => {
+            setTimeout(() => {
+              this.loadStocks();
+            }, 500);
+            this.stockItemForm.reset();
+          })
+        )
+        .subscribe({
+          error: (err) => console.log(err),
+        });
+    }
+  }
+
+  onRemoveItem(stockItemId: string) {
+    this.stockService.deleteStockItem(stockItemId).subscribe({
+      next: () => this.loadStocks(),
+      error: (err) => console.log(err)
+    })
   }
 }

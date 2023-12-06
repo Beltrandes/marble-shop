@@ -5,6 +5,7 @@ import { Stock } from '../models/Stock';
 import { environment } from 'src/environments/environment';
 import { Employee } from '../models/Employee';
 import { WithdrawStockItem } from '../models/WithdrawStockItem';
+import { StockItem } from '../models/StockItem';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class StockService {
   private readonly stockUrl = `${environment.apiUrl}/stock`
 
   private readonly employeeUrl = `${environment.apiUrl}/employee`
+
 
   private stockAddedSubject: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
 
@@ -51,7 +53,27 @@ export class StockService {
     return this.http.put<Stock>(`${this.stockUrl}/${record.id}`, record).pipe(first())
   }
 
+  saveStockItem(record: Partial<StockItem>) {
+    if(record.id) {
+      return this.updateStockItem(record)
+    }
+
+    return this.createStockItem(record)
+  }
+
+  private createStockItem(record: Partial<StockItem>) {
+    return this.http.post<StockItem>(`${this.stockUrl}/item`, record).pipe(first())
+  }
+
+  private updateStockItem(record: Partial<StockItem>) {
+    return this.http.put<StockItem>(`${this.stockUrl}/item/${record.id}`, record).pipe(first())
+  }
+
   withdrawStockItem(record: WithdrawStockItem) {
     return this.http.put<WithdrawStockItem>(`${this.employeeUrl}/withdraw`, record).pipe(first())
+  }
+
+  deleteStockItem(stockItemId: string) {
+    return this.http.delete<StockItem>(`${this.stockUrl}/item/${stockItemId}`)
   }
 }

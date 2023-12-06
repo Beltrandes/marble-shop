@@ -6,7 +6,7 @@
   flex-direction: column
   display: flex
 
-.modal
+.withdrawModal
   background-color: rgba(0, 0, 0, 0.25)
   .modal-dialog
     top: 20%
@@ -43,8 +43,68 @@
       width: 55%
       select
         border: 1px solid $dark-green
+        &:focus
+          border-color: black
+          box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px
     .quantity
       width: 38%
       input
         border: 1px solid $dark-green
+        &:focus
+          border-color: black
+          box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px
+
+.stockItemModal
+  background-color: rgba(0, 0, 0, 0.25)
+  .modal-dialog
+    top: 20%
+    .modal-content
+      background-color: $cambridge-blue
+      border: 1px solid $dark-green
+      color: $champagne
+      border-radius: .25rem
+      .modal-header
+        border-bottom: none
+        .modal-titles
+          display: flex
+          flex-direction: column
+          .modal-title
+            color: $dark-green
+          .modal-subtitle
+            color: $champagne
+            font-size: .8rem
+      .modal-footer
+        border-top: none
+        .confirm
+          background-color: $dark-green
+          color: $champagne
+        .cancel
+          background-color: $champagne
+          &:hover
+            background-color: #c2bcb4
+            color: #f3eadf
+  form
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    input
+        border: 1px solid $dark-green
+        border-radius: .25rem
+        &:focus
+          border-color: black
+          box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px
+    label
+      color: $dark-green
+      font-weight: 500
+    .name-quantity
+      display: flex
+      justify-content: space-between
+      margin-bottom: .5rem
+
+      .name
+        width: 55%
+
+      .initialQuantity
+        width: 38%
+
 
