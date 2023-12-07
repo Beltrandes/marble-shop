@@ -11,6 +11,8 @@ import { Stock } from '../../models/Stock';
 import { StockService } from '../../services/stock.service';
 import { Employee } from '../../models/Employee';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { StockWithdrawMovement } from '../../models/StockWithdrawMovement';
+import { StockEntriesMovement } from '../../models/StockEntriesMovement';
 
 declare let window: any;
 
@@ -25,6 +27,10 @@ export class StockComponent implements OnInit, OnDestroy {
   stocks$!: Observable<Stock[]>;
 
   employees$!: Observable<Employee[]>;
+
+  stockWithdrawMovements$!: Observable<StockWithdrawMovement[]>
+
+  stockEntriesMovements$!: Observable<StockEntriesMovement[]>
 
   headerIconName = 'boxes-stacked';
 
@@ -78,6 +84,8 @@ export class StockComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadStocks();
     this.listenForStockUpdates();
+    this.loadStockWithdrawMovements();
+    this.loadStockEntriesMovements();
     let withdrawModal = document.getElementById('withdrawModal');
     this.withdrawModal = new window.bootstrap.Modal(withdrawModal);
     let stockItemModal = document.getElementById('stockItemModal');
@@ -95,6 +103,14 @@ export class StockComponent implements OnInit, OnDestroy {
 
   loadEmployees() {
     this.employees$ = this.stockService.listEmployees();
+  }
+
+  loadStockEntriesMovements() {
+    this.stockEntriesMovements$ = this.stockService.listStockEntriesMovements()
+  }
+
+  loadStockWithdrawMovements() {
+    this.stockWithdrawMovements$ = this.stockService.listStockWithdrawMovements()
   }
 
   listenForStockUpdates() {
@@ -119,7 +135,7 @@ export class StockComponent implements OnInit, OnDestroy {
   withdraw() {
     if (this.withdrawForm.valid) {
       this.stockService
-        .withdrawStockItem(this.withdrawForm.value)
+        .withdrawStockItemQuantity(this.withdrawForm.value)
         .pipe(
           finalize(() => {
             setTimeout(() => {
@@ -170,5 +186,13 @@ export class StockComponent implements OnInit, OnDestroy {
       next: () => this.loadStocks(),
       error: (err) => console.log(err)
     })
+  }
+
+  switchView() {
+    if (this.selectedView === 'stocks') {
+      this.selectedView = 'movements'
+    } else {
+      this.selectedView = 'stocks'
+    }
   }
 }

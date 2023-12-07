@@ -6,153 +6,178 @@
     [btnText]="btnText"
   ></main-header>
   <router-outlet></router-outlet>
-  <div class="row d-flex justify-content-center">
-    <div class="col-3 d-flex justify-content-center">
-      <button class="w-75 btn active">Estoques</button>
+  <div class="row d-flex justify-content-center viewSelection">
+    <div
+      class="col-3 d-flex justify-content-center"
+      style="border-right: 2px solid darkseagreen"
+    >
+      <button
+        (click)="switchView()"
+        class="w-75 btn"
+        [ngClass]="{ active: selectedView === 'stocks' }"
+      >
+        Estoques
+      </button>
     </div>
     <div class="col-3 d-flex justify-content-center">
-      <button class="w-75 btn">Movimentações</button>
+      <button
+        (click)="switchView()"
+        class="w-75 btn"
+        [ngClass]="{ active: selectedView === 'movements' }"
+      >
+        Movimentações
+      </button>
     </div>
   </div>
-  <stock-list
-    *ngIf="stocks$ | async as stocks"
-    [stocks]="stocks"
-    (withdraw)="openWithdrawModal($event)"
-    (addItem)="onAddStockItem($event)"
-    (removeItem)="onRemoveItem($event)"
-  ></stock-list>
-  <div
-    class="modal withdrawModal fade"
-    id="withdrawModal"
-    tabindex="-1"
-    aria-labelledby="whithdrawModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content shadow">
-        <div class="modal-header">
-          <div class="modal-titles">
-            <h1 class="modal-title fs-5" id="whithdrawModalLabel">
-              Retirar itens
-            </h1>
-            <h5 class="modal-subtitle">
-              Indique o funcionário e a quantidade para prosseguir
-            </h5>
-          </div>
+  <div *ngIf="selectedView === 'stocks'">
+    <stock-list
+      *ngIf="stocks$ | async as stocks"
+      [stocks]="stocks"
+      (withdraw)="openWithdrawModal($event)"
+      (addItem)="onAddStockItem($event)"
+      (removeItem)="onRemoveItem($event)"
+    ></stock-list>
+  </div>
+  <div *ngIf="stockEntriesMovements$ | async as stockEntriesMovements">
+    <stock-movement
+      *ngIf="stockWithdrawMovements$ | async as stockWithdrawMovements"
+      [stockWithdrawMovements]="stockWithdrawMovements"
+      [stockEntriesMovements]="stockEntriesMovements"
+    ></stock-movement>
+  </div>
+</div>
+
+<div
+  class="modal withdrawModal fade"
+  id="withdrawModal"
+  tabindex="-1"
+  aria-labelledby="whithdrawModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content shadow">
+      <div class="modal-header">
+        <div class="modal-titles">
+          <h1 class="modal-title fs-5" id="whithdrawModalLabel">
+            Retirar itens
+          </h1>
+          <h5 class="modal-subtitle">
+            Indique o funcionário e a quantidade para prosseguir
+          </h5>
         </div>
-        <div class="modal-body">
-          <form [formGroup]="withdrawForm" class="mb-1">
-            <div class="employee">
-              <label for="employeesSelect">Funcionário</label>
-              <select
-                class="form-select"
-                id="employeesSelect"
-                aria-label="Default select example"
-                formControlName="employeeId"
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="withdrawForm" class="mb-1">
+          <div class="employee">
+            <label for="employeesSelect">Funcionário</label>
+            <select
+              class="form-select"
+              id="employeesSelect"
+              aria-label="Default select example"
+              formControlName="employeeId"
+            >
+              <option selected>Selecione um funcionário</option>
+              <option
+                *ngFor="let employee of employees$ | async"
+                value="{{ employee.id }}"
               >
-                <option selected>Selecione um funcionário</option>
-                <option
-                  *ngFor="let employee of employees$ | async"
-                  value="{{ employee.id }}"
-                >
-                  {{ employee.name }}
-                </option>
-              </select>
+                {{ employee.name }}
+              </option>
+            </select>
+          </div>
+          <div class="quantity">
+            <label for="quantityInput">Quantidade</label>
+            <input
+              type="number"
+              formControlName="quantity"
+              class="form-control"
+              id="quantityInput"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn cancel" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          [disabled]="!withdrawForm.valid"
+          (click)="withdraw()"
+          data-bs-dismiss="modal"
+          class="btn confirm"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div
+  class="modal stockItemModal fade"
+  id="stockItemModal"
+  tabindex="-1"
+  aria-labelledby="stockItemModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content shadow">
+      <div class="modal-header">
+        <div class="modal-titles">
+          <h1 class="modal-title fs-5" id="stockItemModal">
+            Adicionar item ao estoque ({{ stockNameSelectedToAddItem }})
+          </h1>
+          <h5 class="modal-subtitle">
+            Forneça as informações necessárias para prosseguir
+          </h5>
+        </div>
+      </div>
+      <div class="modal-body">
+        <form [formGroup]="stockItemForm" class="mb-1">
+          <div class="name-quantity">
+            <div class="name">
+              <label for="stockItemName">Nome</label>
+              <input
+                type="text"
+                id="stockItemName"
+                formControlName="name"
+                class="form-control"
+              />
             </div>
-            <div class="quantity">
-              <label for="quantityInput">Quantidade</label>
+            <div class="initialQuantity">
+              <label for="initialQuantityInput">Quantidade inicial</label>
               <input
                 type="number"
                 formControlName="quantity"
                 class="form-control"
-                id="quantityInput"
+                id="initialQuantityInput"
               />
             </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn cancel" data-bs-dismiss="modal">
-            Cancelar
-          </button>
-          <button
-            type="button"
-            [disabled]="!withdrawForm.valid"
-            (click)="withdraw()"
-            data-bs-dismiss="modal"
-            class="btn confirm"
-          >
-            Confirmar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div
-    class="modal stockItemModal fade"
-    id="stockItemModal"
-    tabindex="-1"
-    aria-labelledby="stockItemModal"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog">
-      <div class="modal-content shadow">
-        <div class="modal-header">
-          <div class="modal-titles">
-            <h1 class="modal-title fs-5" id="stockItemModal">
-              Adicionar item ao estoque ({{ stockNameSelectedToAddItem }})
-            </h1>
-            <h5 class="modal-subtitle">
-              Forneça as informações necessárias para prosseguir
-            </h5>
           </div>
-        </div>
-        <div class="modal-body">
-          <form [formGroup]="stockItemForm" class="mb-1">
-            <div class="name-quantity">
-              <div class="name">
-                <label for="stockItemName">Nome</label>
-                <input
-                  type="text"
-                  id="stockItemName"
-                  formControlName="name"
-                  class="form-control"
-                />
-              </div>
-              <div class="initialQuantity">
-                <label for="initialQuantityInput">Quantidade inicial</label>
-                <input
-                  type="number"
-                  formControlName="quantity"
-                  class="form-control"
-                  id="initialQuantityInput"
-                />
-              </div>
-            </div>
-            <div class="details">
-              <label for="detailsInput">Detalhes(Opicional)</label>
-              <input
-                type="text"
-                formControlName="details"
-                class="form-control"
-                id="detailsInput"
-              />
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn cancel" data-bs-dismiss="modal">
-            Cancelar
-          </button>
-          <button
-            type="button"
-            [disabled]="!stockItemForm.valid"
-            (click)="addItem()"
-            data-bs-dismiss="modal"
-            class="btn confirm"
-          >
-            Confirmar
-          </button>
-        </div>
+          <div class="details">
+            <label for="detailsInput">Detalhes(Opicional)</label>
+            <input
+              type="text"
+              formControlName="details"
+              class="form-control"
+              id="detailsInput"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn cancel" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+        <button
+          type="button"
+          [disabled]="!stockItemForm.valid"
+          (click)="addItem()"
+          data-bs-dismiss="modal"
+          class="btn confirm"
+        >
+          Confirmar
+        </button>
       </div>
     </div>
   </div>

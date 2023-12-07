@@ -1,5 +1,5 @@
 import { Stock } from "./Stock"
-import { StockMovement } from "./StockMovement"
+import { StockWithdrawMovement } from "./StockWithdrawMovement"
 
 export interface StockItem {
   id: string
@@ -7,5 +7,5 @@ export interface StockItem {
   details: string
   quantity: number
   stock: Stock
-  stockMovement: StockMovement[]
+  stockMovement: StockWithdrawMovement[]
 }

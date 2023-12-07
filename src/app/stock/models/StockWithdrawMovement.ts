@@ -1,10 +1,10 @@
 import { Employee } from "./Employee"
 import { StockItem } from "./StockItem"
 
-export interface StockMovement {
+export interface StockWithdrawMovement {
   id: string
   employee: Employee
-  item: StockItem
+  stockItem: StockItem
   movementDate: Date
   initialQuantity: number
   withdrawalQuantity: number

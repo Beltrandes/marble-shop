@@ -4,8 +4,11 @@ import { BehaviorSubject, first } from 'rxjs';
 import { Stock } from '../models/Stock';
 import { environment } from 'src/environments/environment';
 import { Employee } from '../models/Employee';
-import { WithdrawStockItem } from '../models/WithdrawStockItem';
+import { WithdrawStockItemQuantity } from '../models/WithdrawStockItemQuantity';
 import { StockItem } from '../models/StockItem';
+import { StockWithdrawMovement } from '../models/StockWithdrawMovement';
+import { AddStockItemQuantity } from '../models/AddStockItemQuantity';
+import { StockEntriesMovement } from '../models/StockEntriesMovement';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +32,14 @@ export class StockService {
     return this.http.get<Employee[]>(this.employeeUrl).pipe(first())
   }
 
+  listStockWithdrawMovements() {
+    return this.http.get<StockWithdrawMovement[]>(`${this.stockUrl}/movements/withdraw`).pipe(first())
+  }
+
+  listStockEntriesMovements() {
+    return this.http.get<StockEntriesMovement[]>(`${this.stockUrl}/movements/entries`).pipe(first())
+  }
+
   stockAddedSuccess(): void {
     this.stockAddedSubject.next(true);
   }
@@ -38,7 +49,7 @@ export class StockService {
   }
 
   saveStock(record: Partial<Stock>) {
-    if(record.id) {
+    if (record.id) {
       return this.updateStock(record)
     }
 
@@ -54,7 +65,7 @@ export class StockService {
   }
 
   saveStockItem(record: Partial<StockItem>) {
-    if(record.id) {
+    if (record.id) {
       return this.updateStockItem(record)
     }
 
@@ -69,11 +80,15 @@ export class StockService {
     return this.http.put<StockItem>(`${this.stockUrl}/item/${record.id}`, record).pipe(first())
   }
 
-  withdrawStockItem(record: WithdrawStockItem) {
-    return this.http.put<WithdrawStockItem>(`${this.employeeUrl}/withdraw`, record).pipe(first())
+  withdrawStockItemQuantity(record: WithdrawStockItemQuantity) {
+    return this.http.put<WithdrawStockItemQuantity>(`${this.employeeUrl}/withdraw`, record).pipe(first())
   }
 
   deleteStockItem(stockItemId: string) {
     return this.http.delete<StockItem>(`${this.stockUrl}/item/${stockItemId}`)
+  }
+
+  addStockItemQuantity(record: AddStockItemQuantity) {
+    return this.http.put<AddStockItemQuantity>(`${this.stockUrl}/add`, record).pipe(first())
   }
 }

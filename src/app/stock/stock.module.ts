@@ -9,9 +9,10 @@ import { StockListComponent } from './components/stock-list/stock-list.component
 import { HttpClientModule } from '@angular/common/http';
 import { StockFormComponent } from './components/stock-form/stock-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { StockMovementComponent } from './components/stock-movement/stock-movement.component';
 
 @NgModule({
-  declarations: [StockComponent, StockListComponent, StockFormComponent],
+  declarations: [StockComponent, StockListComponent, StockFormComponent, StockMovementComponent],
   imports: [CommonModule, StockRoutingModule, SharedModule, HttpClientModule, ReactiveFormsModule],
 })
 export class StockModule {}

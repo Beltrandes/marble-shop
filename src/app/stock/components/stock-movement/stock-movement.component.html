@@ -1,0 +1,71 @@
+<div class="movements">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Retiradas do estoque</h5>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Item</th>
+            <th scope="col">Funcionário</th>
+            <th scope="col">Quantidade inicial</th>
+            <th scope="col">Quantidade retirada</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let stockWithdrawMovement of stockWithdrawMovements">
+            <th scope="row">
+              {{ stockWithdrawMovement.movementDate | date : "dd/MM/yyyy 'ás' hh:mm" }}
+            </th>
+            <td>
+              {{ stockWithdrawMovement.stockItem.name}} <span *ngIf="stockWithdrawMovement.stockItem.details != null && stockWithdrawMovement.stockItem.details != ''">({{stockWithdrawMovement.stockItem.details}})</span>
+
+            </td>
+            <td>
+              {{ stockWithdrawMovement.employee.name }}
+            </td>
+            <td>
+              {{ stockWithdrawMovement.initialQuantity }}
+            </td>
+            <td>
+              {{ stockWithdrawMovement.withdrawalQuantity }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Entradas do estoque</h5>
+
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Data</th>
+            <th scope="col">Item</th>
+            <th scope="col">Quantidade inicial</th>
+            <th scope="col">Quantidade adicionada</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let stockEntriesMovement of stockEntriesMovements">
+            <th scope="row">
+              {{ stockEntriesMovement.movementDate | date : "dd/MM/yyyy 'ás' hh:mm" }}
+            </th>
+            <td>
+              {{ stockEntriesMovement.stockItem.name}} <span *ngIf="stockEntriesMovement.stockItem.details != null && stockEntriesMovement.stockItem.details != ''">({{stockEntriesMovement.stockItem.details}})</span>
+
+            </td>
+            <td>
+              {{ stockEntriesMovement.initialQuantity }}
+            </td>
+            <td>
+              {{ stockEntriesMovement.addedQuantity }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

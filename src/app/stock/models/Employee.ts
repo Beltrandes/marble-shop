@@ -1,7 +1,7 @@
-import { StockMovement } from "./StockMovement"
+import { StockWithdrawMovement } from "./StockWithdrawMovement"
 
 export interface Employee {
   id: string
   name: string
-  movements: StockMovement[]
+  movements: StockWithdrawMovement[]
 }
