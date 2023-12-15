@@ -36,14 +36,18 @@
       (withdraw)="openWithdrawModal($event)"
       (addItem)="onAddStockItem($event)"
       (removeItem)="onRemoveItem($event)"
+      (add)="onAddQuantity($event)"
+      (edit)="onStockItemEdit($event)"
     ></stock-list>
   </div>
-  <div *ngIf="stockEntriesMovements$ | async as stockEntriesMovements">
-    <stock-movement
-      *ngIf="stockWithdrawMovements$ | async as stockWithdrawMovements"
-      [stockWithdrawMovements]="stockWithdrawMovements"
-      [stockEntriesMovements]="stockEntriesMovements"
-    ></stock-movement>
+  <div *ngIf="selectedView === 'movements'">
+    <div *ngIf="stockEntriesMovements$ | async as stockEntriesMovements">
+      <stock-movement
+        *ngIf="stockWithdrawMovements$ | async as stockWithdrawMovements"
+        [stockWithdrawMovements]="stockWithdrawMovements"
+        [stockEntriesMovements]="stockEntriesMovements"
+      ></stock-movement>
+    </div>
   </div>
 </div>
 

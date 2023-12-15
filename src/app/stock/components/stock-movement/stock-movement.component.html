@@ -1,21 +1,21 @@
 <div class="movements">
-  <div class="card">
+  <div class="card shadow">
     <div class="card-body">
-      <h5 class="card-title">Retiradas do estoque</h5>
+      <h5 class="card-title">Retiradas do estoque <i class="fa-solid fa-arrow-up"></i></h5>
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Data</th>
+            <th scope="col" style="width: 20%;">Data</th>
             <th scope="col">Item</th>
             <th scope="col">Funcionário</th>
-            <th scope="col">Quantidade inicial</th>
-            <th scope="col">Quantidade retirada</th>
+            <th scope="col" style="width: 15%;">Qtde. inicial</th>
+            <th scope="col" style="width: 15%;">Qtde. retirada</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let stockWithdrawMovement of stockWithdrawMovements">
             <th scope="row">
-              {{ stockWithdrawMovement.movementDate | date : "dd/MM/yyyy 'ás' hh:mm" }}
+              {{ stockWithdrawMovement.movementDate | date : "dd/MM/yyyy 'ás' HH:mm" }}
             </th>
             <td>
               {{ stockWithdrawMovement.stockItem.name}} <span *ngIf="stockWithdrawMovement.stockItem.details != null && stockWithdrawMovement.stockItem.details != ''">({{stockWithdrawMovement.stockItem.details}})</span>
@@ -35,23 +35,23 @@
       </table>
     </div>
   </div>
-  <div class="card">
+  <div class="card shadow">
     <div class="card-body">
-      <h5 class="card-title">Entradas do estoque</h5>
+      <h5 class="card-title">Entradas do estoque <i class="fa-solid fa-arrow-down"></i></h5>
 
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Data</th>
+            <th scope="col" style="width: 20%;">Data</th>
             <th scope="col">Item</th>
-            <th scope="col">Quantidade inicial</th>
-            <th scope="col">Quantidade adicionada</th>
+            <th scope="col" style="width: 15%;">Qtde. inicial</th>
+            <th scope="col" style="width: 15%;">Qtde. adicionada</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let stockEntriesMovement of stockEntriesMovements">
             <th scope="row">
-              {{ stockEntriesMovement.movementDate | date : "dd/MM/yyyy 'ás' hh:mm" }}
+              {{ stockEntriesMovement.movementDate | date : "dd/MM/yyyy 'ás' HH:mm" }}
             </th>
             <td>
               {{ stockEntriesMovement.stockItem.name}} <span *ngIf="stockEntriesMovement.stockItem.details != null && stockEntriesMovement.stockItem.details != ''">({{stockEntriesMovement.stockItem.details}})</span>

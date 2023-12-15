@@ -13,6 +13,7 @@ import { Employee } from '../../models/Employee';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StockWithdrawMovement } from '../../models/StockWithdrawMovement';
 import { StockEntriesMovement } from '../../models/StockEntriesMovement';
+import { AddStockItemQuantity } from '../../models/AddStockItemQuantity';
 
 declare let window: any;
 
@@ -194,5 +195,15 @@ export class StockComponent implements OnInit, OnDestroy {
     } else {
       this.selectedView = 'stocks'
     }
+  }
+
+  onAddQuantity(toAdd: AddStockItemQuantity) {
+    this.stockService.addStockItemQuantity(toAdd).pipe(finalize(() => {
+      this.loadStocks()
+    })).subscribe()
+  }
+
+  onStockItemEdit(stockItemId: string) {
+    console.log(stockItemId)
   }
 }

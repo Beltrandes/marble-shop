@@ -1,5 +1,5 @@
 <div class="stocks">
-  <div *ngFor="let stock of stocks" class="card shadow">
+  <div *ngFor="let stock of stocks; let b = index" class="card shadow">
     <div class="card-body">
       <h5 class="card-title align-items-center">
         <div class="stock-name">
@@ -15,7 +15,6 @@
             <i class="fa-solid fa-trash"></i>
           </button>
         </div>
-
       </h5>
 
       <table class="table">
@@ -28,17 +27,44 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let item of stock.items">
+          <tr *ngFor="let item of stock.items; let i = index">
             <th scope="row" class="quantity">{{ item.quantity }}</th>
             <td class="name">{{ item.name }}</td>
             <td class="details">
-              {{ item.details }} <span *ngIf="item.details === null || item.details === ''">-</span>
+              {{ item.details }}
+              <span *ngIf="item.details === null || item.details === ''"
+                >-</span
+              >
             </td>
             <td class="actions">
-              <button (click)="withdrawStockItem(item.id)"><i class="fa-solid fa-arrow-up"></i></button>
-              <button (click)="removeStockItem(item.id)" class="remove-btn"><i class="fa-solid fa-trash"></i></button>
-              <button><i class="fa-solid fa-plus"></i></button>
-              <button><i class="fa-solid fa-pencil"></i></button>
+              <div
+                *ngIf="!fastAddOpened || activeItemIndex != i || activeStockIndex != b"
+                class="default-actions"
+              >
+                <button (click)="withdrawStockItem(item.id)">
+                  <i class="fa-solid fa-arrow-up"></i>
+                </button>
+                <button (click)="removeStockItem(item.id)" class="remove-btn">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+                <button (click)="openFastAdd(i, b)">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+                <button (click)="editItem(item.id)"><i class="fa-solid fa-pencil"></i></button>
+              </div>
+              <div
+                *ngIf="fastAddOpened && activeItemIndex === i && activeStockIndex === b"
+                class="fast-add-actions"
+              >
+                <button (click)="decreaseQuantity()">
+                  <i class="fa-solid fa-minus"></i>
+                </button>
+                <input [value]="quantity" type="text" />
+                <button (click)="increaseQuantity()">
+                  <i class="fa-solid fa-plus"></i>
+                </button>
+                <button (click)="addQuantity(item.id, quantity)"><i class="fa-solid fa-check"></i></button>
+              </div>
             </td>
           </tr>
         </tbody>
