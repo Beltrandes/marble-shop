@@ -14,6 +14,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { StockWithdrawMovement } from '../../models/StockWithdrawMovement';
 import { StockEntriesMovement } from '../../models/StockEntriesMovement';
 import { AddStockItemQuantity } from '../../models/AddStockItemQuantity';
+import { StockItem } from '../../models/StockItem';
 
 declare let window: any;
 
@@ -38,6 +39,7 @@ export class StockComponent implements OnInit, OnDestroy {
   withdrawForm: FormGroup;
 
   stockItemForm: FormGroup;
+
 
   withdrawModal: any;
 
@@ -67,11 +69,13 @@ export class StockComponent implements OnInit, OnDestroy {
     });
 
     this.stockItemForm = this.formBuilder.group({
+      id: [''],
       name: ['', Validators.required],
       details: [''],
       quantity: [0, Validators.min(1)],
       stock: ['', Validators.required],
     });
+
   }
 
   onAddStock() {
@@ -203,7 +207,17 @@ export class StockComponent implements OnInit, OnDestroy {
     })).subscribe()
   }
 
-  onStockItemEdit(stockItemId: string) {
-    console.log(stockItemId)
+  onStockItemEdit(stockItem: StockItem) {
+
+
+    this.stockItemForm.patchValue({
+      id: stockItem.id,
+      name: stockItem.name,
+      details: stockItem.details,
+      quantity: stockItem.quantity,
+      stock: stockItem.stock
+
+    })
+    this.stockItemModal.show()
   }
 }

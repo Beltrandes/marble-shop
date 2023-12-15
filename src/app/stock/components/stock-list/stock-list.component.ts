@@ -1,6 +1,7 @@
 import { AddStockItemQuantity } from './../../models/AddStockItemQuantity';
 import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { Stock } from '../../models/Stock';
+import { StockItem } from '../../models/StockItem';
 
 @Component({
   selector: 'stock-list',
@@ -75,7 +76,9 @@ export class StockListComponent {
     this.add.emit(this.toAdd)
   }
 
-  editItem(stockItemId: string) {
-    this.edit.emit(stockItemId)
+  editItem(stockItem: StockItem, stock: Stock) {
+    stockItem.stock = stock
+    this.edit.emit(stockItem)
+    console.log('componente filho emitindo: ', stockItem)
   }
 }

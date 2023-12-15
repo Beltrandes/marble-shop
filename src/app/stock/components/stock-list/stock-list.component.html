@@ -50,7 +50,7 @@
                 <button (click)="openFastAdd(i, b)">
                   <i class="fa-solid fa-plus"></i>
                 </button>
-                <button (click)="editItem(item.id)"><i class="fa-solid fa-pencil"></i></button>
+                <button (click)="editItem(item, stock)"><i class="fa-solid fa-pencil"></i></button>
               </div>
               <div
                 *ngIf="fastAddOpened && activeItemIndex === i && activeStockIndex === b"

@@ -77,7 +77,7 @@ export class StockService {
   }
 
   private updateStockItem(record: Partial<StockItem>) {
-    return this.http.put<StockItem>(`${this.stockUrl}/item/${record.id}`, record).pipe(first())
+    return this.http.put<StockItem>(`${this.stockUrl}/item/edit/${record.id}`, record).pipe(first())
   }
 
   withdrawStockItemQuantity(record: WithdrawStockItemQuantity) {
